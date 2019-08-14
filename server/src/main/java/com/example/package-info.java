@@ -1,5 +1,5 @@
 /**
-*This is a Pckage name.
+*This is a Pckage name!
 */
 package com.example;
 
