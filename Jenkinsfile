@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     parameters {
-         string(name: 'Tomcat-Stg', defaultValue: '100.25.180.160', description: 'Staging Server')
-         string(name: 'Tomcat-Prd', defaultValue: '100.25.31.37', description: 'Production Server')
+         string(name: 'Tomcat_Stg', defaultValue: '100.25.180.160', description: 'Staging Server')
+         string(name: 'Tomcat_Prd', defaultValue: '100.25.31.37', description: 'Production Server')
     }
     triggers{
         pollSCM('* * * * *')
@@ -24,13 +24,13 @@ stages{
             parallel{
                 stage ('Deploy to Staging'){
                     steps {
-                        bat "scp -i NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat-Stg}:/var/lib/tomcat7/webapps"
+                        bat "scp -i NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat_Stg}:/var/lib/tomcat7/webapps"
                     }
                 }
 
                 stage ("Deploy to Production"){
                     steps {
-                        bat "scp -i NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat-Prd}:/var/lib/tomcat7/webapps"
+                        bat "scp -i NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat_Prd}:/var/lib/tomcat7/webapps"
                     }
                 }
             }
