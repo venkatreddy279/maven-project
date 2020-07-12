@@ -24,13 +24,13 @@ stages{
             parallel{
                 stage ('Deploy to Staging'){
                     steps {
-                        bat "scp -i NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat_Stg}:/var/lib/tomcat7/webapps"
+                        bat "pscp -i NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat_Stg}:/var/lib/tomcat7/webapps"
                     }
                 }
 
                 stage ("Deploy to Production"){
                     steps {
-                        bat "scp -i NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat_Prd}:/var/lib/tomcat7/webapps"
+                        bat "pscp -i NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat_Prd}:/var/lib/tomcat7/webapps"
                     }
                 }
             }
