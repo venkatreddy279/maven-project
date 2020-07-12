@@ -24,13 +24,13 @@ stages{
             parallel{
                 stage ('Deploy to Staging'){
                     steps {
-                        bat "scp -i .\Downloads\NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat-Stg}:/var/lib/tomcat7/webapps"
+                        bat "scp -i \Downloads\NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat-Stg}:/var/lib/tomcat7/webapps"
                     }
                 }
 
                 stage ("Deploy to Production"){
                     steps {
-                        bat "scp -i .\Downloads\NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat-Prd}:/var/lib/tomcat7/webapps"
+                        bat "scp -i \Downloads\NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat-Prd}:/var/lib/tomcat7/webapps"
                     }
                 }
             }
