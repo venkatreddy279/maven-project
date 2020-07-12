@@ -1,13 +1,17 @@
-pipeline {
+Pipeline {
     agent any
-     tools {
-         maven 'mavenHome'
-         jdk 'localJDK'
+
+    parameters {
+         string(name: 'Tomcat-Stg', defaultValue: '100.25.180.160', description: 'Staging Server')
+         string(name: 'Tomcat-Prd', defaultValue: '100.25.31.37', description: 'Production Server')
     }
-    stages{
-        stage('Build'){
+    triggers{
+        pollSCM('* * * * *')
+    }
+stages{
+       stage('Build'){
             steps {
-                bat 'mvn clean package'
+                Build 'mvn clean package'
             }
             post {
                 success {
@@ -16,28 +20,21 @@ pipeline {
                 }
             }
         }
-        stage('deploy-to-staging'){
-            steps {
-                build job: 'deploy-to-staging'
-            }
-        }
-        stage ('Deploy to Production'){
-            steps{
-                timeout(time:5, unit:'DAYS'){
-                    input message:'Approve PRODUCTION Deployment?'
-                 }
-
-                build job: 'deploy-to-production'
-               }
-            post {
-                success {
-                    echo 'Code deployed to Production.'
+        stage ('Deployments'){
+            parallel{
+                stage ('Deploy to Staging'){
+                    steps {
+                        sh "scp -i .\Downloads\NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat-Stg}:/var/lib/tomcat7/webapps"
+                    }
                 }
 
-                failure {
-                    echo ' Deployment failed.'
-                 }
-               }
+                stage ("Deploy to Production"){
+                    steps {
+                        sh "scp -i .\Downloads\NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat-Prd}:/var/lib/tomcat7/webapps"
+                    }
+                }
+            }
         }
+
     }
 }
