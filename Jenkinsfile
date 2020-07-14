@@ -24,13 +24,13 @@ stages{
             parallel{
                 stage ('Deploy to Staging'){
                     steps {
-                        bat "winscp.exe -i C:\\MISC\\keypair\\NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat_Stg}:/var/lib/tomcat7/webapps"
+                        bat "winscp.exe -i C:\\MISC\\keypair\\NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat_Stg}:/var/lib/tomcat/webapps"
                     }
                 }
 
                 stage ("Deploy to Production"){
                     steps {
-                        bat "winscp.exe -i C:\\MISC\\keypair\\NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat_Prd}:/var/lib/tomcat7/webapps"
+                        bat "winscp.exe -i C:\\MISC\\keypair\\NVirginiaKeyPair.pem **/target/*.war ec2-user@${params.Tomcat_Prd}:/var/lib/tomcat/webapps"
                     }
                 }
             }
